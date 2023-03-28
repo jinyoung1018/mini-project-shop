@@ -1,5 +1,17 @@
-<template>
-<div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <style>
+    .card {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Soldout</a>
@@ -9,19 +21,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">홈</router-link>
+            <a class="nav-link" aria-current="page" href="#">홈</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link active" to="/">제품리스트</router-link>
+            <a class="nav-link active" href="#">전자제품</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/detail">제품상세페이지</router-link>
+            <a class="nav-link" href="#">의류</a>
           </li>
-          <li v-if="user.email!=undefined" class="nav-item">
-            <router-link class="nav-link" to="/sales">제품등록페이지</router-link>
+          <li class="nav-item">
+            <a class="nav-link" href="#">식품</a>
           </li>
-          <li v-if="user.email==undefined"><button class="btn btn-danger" type="button" @click="kakaoLoin">로그인</button></li>
-          <li v-else><button class="btn btn-danger" type="button" @click="kakaoLogout">로그아웃</button></li>
         </ul>
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -30,7 +40,21 @@
       </div>
     </div>
   </nav>
-  <router-view/>
+  <main class="mt-3">
+    <div class="container">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>제품명</th>
+            <th>제품가격</th>
+            <th>배송비</th>
+            <th>추가배송비</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
   <footer class="mt-5 py-5 bg-dark">
     <div class="row">
       <div class="col-12 col-md">
@@ -77,70 +101,6 @@
       </div>
     </div>
   </footer>
-  </div>
-</template>
-<script>
-export default {
-  computed: {
-    user() {
-      return this.$store.state.user;
-    }
-  },
-  methods: {
-    kakaoLoin() {
-      window.Kakao.Auth.login({
-        scope: 'profile_nickname, account_email, gender',
-        success: this.getProfile
-      });
-    },
-    getProfile(authObj) {
-      console.log(authObj);
-      window.Kakao.API.request({
-        url: '/v2/user/me',
-        success: res => {
-          const kakao_account = res.kakao_account;
-          console.log(kakao_account);
-          this.login(kakao_account);
-          alert("로그인 성공!");
-        }
-      });
-    },
-    async login(kakao_account) {
-      await this.$api("/api/login", {
-        param: [
-          {email:kakao_account.email, nickname:kakao_account.profile_nickname},
-          {nickname:kakao_account.profile_nickname}
-        ]
-      });
-      this.$store.commit("user", kakao_account);
-    },
-    kakaoLogout() {
-      window.Kakao.Auth.logout((response) => {
-        console.log(response);
-        this.$store.commit("user", {});
-        alert("로그아웃");
-        this.$router.push({path:'/'}); 
-      });
-    }
-  }
-}
-</script>
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</body>
+</html>
