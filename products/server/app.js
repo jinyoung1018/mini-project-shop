@@ -3,19 +3,19 @@ const app = express();
 const session = require('express-session');
 const fs = require('fs');
 
-const cors = require('cors');
+// const cors = require('cors');
 
 let corsOption = {
   origin: 'http://localhost:8080', // 허락하는 요청 주소
   credentials: true // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
 }
 
-app.use(cors(corsOption)); // CORS 미들웨어 추가
+// app.use(cors(corsOption)); // CORS 미들웨어 추가
 
 app.use(session({
   secret: 'secret code',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false, 
   cookie: {
     secure: false,
     maxAge: 1000 * 60 * 60 //쿠기 유효시간 1시간
@@ -24,7 +24,7 @@ app.use(session({
 
 app.use(express.json({
   limit: '50mb'
-})); //
+})); 
 
 const server = app.listen(3000, () => {
   console.log('Server started. port 3000.');
@@ -39,9 +39,9 @@ fs.watchFile(__dirname + '/sql.js', (curr, prev) => {
 });
 
 const db = {
-  database: "dev_class",
+  database: "dev",
   connectionLimit: 10,
-  host: "192.168.35.15",
+  host: "192.168.35.137",
   user: "root",
   password: "mariadb"
 };
@@ -49,6 +49,9 @@ const db = {
 const dbPool = require('mysql').createPool(db);
 
 app.post('/api/login', async (request, res) => {
+
+  // request.session['email'] = 'bjy991018@naver.com';
+  // res.send('ok');
   
   try {
     await req.db('signUp', request.body.param);
@@ -134,6 +137,10 @@ app.post('/apirole/:alias', async (request, res) => {
 });
 
 app.post('/api/:alias', async (request, res) => {
+  // if(!request.session.email){
+  //   return res.status(401).send({error:'you need to login.'});
+  // }
+
   try {
     res.send(await req.db(request.params.alias, request.body.param, request.body.where));
   } catch (err) {
