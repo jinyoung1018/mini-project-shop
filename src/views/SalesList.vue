@@ -18,7 +18,7 @@
           <tbody>
             <tr :key="i" v-for="(product, i) in productList">
               <td>
-                <img v-if="product.path!=null" :src="`/download/${product.id}/${product.path}`" style="height:50px;width:auto;" />
+                <img v-if="product.path!=null" :src="product.path" style="height:50px;width:auto;" />
               </td>
               <td>{{product.product_name}}</td>
               <td>{{product.product_price}}</td>
