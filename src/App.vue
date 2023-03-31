@@ -143,4 +143,14 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+#wrap {
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 60px;
+}
+
+footer {
+    position: relative; 
+    transform: translatY(-100%);
+}
 </style>
